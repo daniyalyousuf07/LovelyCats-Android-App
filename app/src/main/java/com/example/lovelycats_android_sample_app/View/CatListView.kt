@@ -35,7 +35,7 @@ import coil.compose.AsyncImage
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
 
 @Composable
-fun CatListViewRendering() {
+fun CatListViewRendering(navigationCallBack: (String) -> Unit) {
 
     val viewModel: CatbreedViewModel = viewModel()
     val breed = viewModel.catListState.value
@@ -44,7 +44,7 @@ fun CatListViewRendering() {
         items(breed) {
             CatListCell(
                 breed = it
-            ) {}
+            , navigationCallBack)
         }
     }
 
