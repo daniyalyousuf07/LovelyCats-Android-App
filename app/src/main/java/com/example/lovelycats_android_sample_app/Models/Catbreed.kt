@@ -1,5 +1,6 @@
 import com.google.gson.annotations.SerializedName
 
+
 data class BreedModel (
     val weight: Weight,
     val id: String,
@@ -41,6 +42,7 @@ data class BreedModel (
     val catFriendly: Long? = null,
     val bidability: Long? = null
 )
+
 
 data class Weight (
     val imperial: String,

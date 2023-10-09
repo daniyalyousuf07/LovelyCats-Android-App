@@ -1,5 +1,6 @@
 package com.example.lovelycats_android_sample_app
 
+import BreedModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +21,7 @@ import com.example.lovelycats_android_sample_app.View.CatDetailView
 import com.example.lovelycats_android_sample_app.View.CatListViewRendering
 import com.example.lovelycats_android_sample_app.ViewModel.CatDetailViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LovelyCatsAndroidSampleAppTheme
+import com.squareup.moshi.Moshi
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,18 +46,23 @@ fun MainFlow() {
     NavHost(navController = navigationController, startDestination = "cat-listing") {
         composable(route = "cat-listing") {
             CatListViewRendering(navigationCallBack = {
-                navigationController.navigate("cat-detail/$it")
+                val moshi = Moshi.Builder().build()
+                val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
+                val modelJson = jsonAdapter.toJson(it)
+                navigationController.navigate("cat-detail={model}".replace("{model}", modelJson))
             })
         }
-        composable(route = "cat-detail/{cat-id}",
-            arguments = listOf(navArgument(name = "cat-id") {
-                type = NavType.StringType
-            })
+        composable(route = "cat-detail={model}"
+//            ,
+//            arguments = listOf(navArgument(name = "cat-id") {
+//                type = NavType.StringType
+//            })
         ) {
-            val catId = it.arguments?.getString("cat-id")
-            println(catId)
-            
-            CatDetailView(id = catId!!)
+            val modelJson =  it.arguments?.getString("model")
+            val moshi = Moshi.Builder().build()
+            val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
+            val model = jsonAdapter.fromJson(modelJson)
+            CatDetailView(model = model!!)
         }
     }
 }

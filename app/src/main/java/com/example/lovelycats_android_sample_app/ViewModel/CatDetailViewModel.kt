@@ -11,16 +11,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class CatDetailViewModel(private val savedState: SavedStateHandle,): ViewModel() {
+class CatDetailViewModel(id: String): ViewModel() {
     private val repository: CatbreedRepository = CatbreedRepository.getInstance()
     var imageDetailState: MutableState<List<CatImageDetailModel>> = mutableStateOf(emptyList<CatImageDetailModel>())
     private val job = Job()
 
     init {
         val scope = CoroutineScope(job + Dispatchers.IO)
-        val catId = savedState.get<String>("cat-id")?: ""
+//        val catId = savedState.get<String>("cat-id")?: ""
         scope.launch {
-            imageDetailState.value = getImageDetail(id = catId)
+            imageDetailState.value = getImageDetail(id = id)
         }
     }
 

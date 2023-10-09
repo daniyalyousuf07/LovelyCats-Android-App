@@ -28,6 +28,12 @@ class CatbreedViewModel() : ViewModel() {
         return repository.getBreeds()
     }
 
+    fun getBreed(id: String): BreedModel {
+        return catListState.value.first {
+            it.id == id
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()

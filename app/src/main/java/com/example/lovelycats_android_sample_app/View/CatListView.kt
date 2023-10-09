@@ -35,7 +35,7 @@ import coil.compose.AsyncImage
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
 
 @Composable
-fun CatListViewRendering(navigationCallBack: (String) -> Unit) {
+fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
 
     val viewModel: CatbreedViewModel = viewModel()
     val breed = viewModel.catListState.value
@@ -52,7 +52,7 @@ fun CatListViewRendering(navigationCallBack: (String) -> Unit) {
 @Composable
 fun CatListCell(
     breed: BreedModel,
-    navigationCallBack: (String) -> Unit) {
+    navigationCallBack: (BreedModel) -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(),
@@ -60,7 +60,7 @@ fun CatListCell(
             .fillMaxWidth()
             .padding(12.dp)
             .clickable {
-                navigationCallBack(breed.id)
+                navigationCallBack(breed)
             }
     )     {
         Row(modifier = Modifier.animateContentSize()) {
