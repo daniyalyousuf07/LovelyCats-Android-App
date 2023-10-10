@@ -9,11 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.lovelycats_android_sample_app.Models.CatImageDetailModel
 import com.example.lovelycats_android_sample_app.ViewModel.CatDetailViewModel
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
@@ -35,12 +41,23 @@ fun CatDetailView(model: BreedModel) {
 
     LazyColumn() {
         items(1) {
-            AsyncImage(model = viewModel.imageDetailState.value.first().url,
+
+            val matrix = ColorMatrix()
+            matrix.setToSaturation(2F)
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(viewModel.imageDetailState.value.first().url)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "",
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxSize())
-            
+                    .fillMaxSize()
+                    .height(400.dp),
+                colorFilter = ColorFilter.colorMatrix(matrix)
+            )
+
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
