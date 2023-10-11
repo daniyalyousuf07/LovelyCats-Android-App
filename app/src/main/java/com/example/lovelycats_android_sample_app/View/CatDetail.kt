@@ -25,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -75,3 +77,54 @@ fun CatDetailView(model: BreedModel) {
         }
     }
 }
+
+
+@Composable
+fun CatDetailViewConstraintLayout(model: BreedModel) {
+
+    val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id)
+
+    ConstraintLayout {
+
+        val (image, name, description) = createRefs()
+            val matrix = ColorMatrix()
+            matrix.setToSaturation(2F)
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("https://image.lexica.art/full_jpg/5ff6c2c0-a3da-4dd7-8071-919f66b18fa9")
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .constrainAs(image) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        height = Dimension.value(400.dp)
+                    }
+                    .height(400.dp),
+                colorFilter = ColorFilter.colorMatrix(matrix)
+            )
+
+        Text(text = model.name,
+            textAlign = TextAlign.Center,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Medium,
+            modifier =
+            Modifier.constrainAs(name) {
+                top.linkTo(image.bottom, margin = 20.dp)
+                centerHorizontallyTo(parent)
+            },
+            )
+
+        Text(text = model.description,
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp, modifier = Modifier.constrainAs(description) {
+                top.linkTo(name.bottom, margin = 10.dp)
+            }.padding(8.dp))
+        }
+    }
+

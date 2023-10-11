@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.lovelycats_android_sample_app.View.CatDetailView
+import com.example.lovelycats_android_sample_app.View.CatDetailViewConstraintLayout
 import com.example.lovelycats_android_sample_app.View.CatListViewRendering
 import com.example.lovelycats_android_sample_app.ViewModel.CatDetailViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LovelyCatsAndroidSampleAppTheme
@@ -62,7 +63,8 @@ fun MainFlow() {
             val moshi = Moshi.Builder().build()
             val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
             val model = jsonAdapter.fromJson(modelJson)
-            CatDetailView(model = model!!)
+            //CatDetailView(model = model!!)
+            CatDetailViewConstraintLayout(model = model!!)
         }
     }
 }
