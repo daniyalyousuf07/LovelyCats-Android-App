@@ -2,10 +2,13 @@ package com.example.lovelycats_android_sample_app.View
 
 import BreedModel
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,6 +36,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
+import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 
 @Composable
 fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
@@ -64,15 +68,22 @@ fun CatListCell(
             }
     )     {
         Row(modifier = Modifier.animateContentSize()) {
+            Spacer(modifier = Modifier.padding(5.dp))
             AsyncImage(model = "https://cataas.com/cat/says/hello%20world!",
                 contentDescription = breed.name,
                 modifier = Modifier
                     .size(100.dp)
-                    .padding(10.dp)
                     .clip(CircleShape)
+                    .border(
+                        border = BorderStroke(
+                            width = 2.dp,
+                            color = MaterialTheme.colorScheme.LightGreen
+                        ), shape = CircleShape
+                    )
                     .align(Alignment.CenterVertically),
                 contentScale = ContentScale.FillBounds
             )
+            Spacer(modifier = Modifier.padding(5.dp))
             Column(modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .fillMaxWidth(0.8f)
