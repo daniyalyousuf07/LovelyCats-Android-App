@@ -20,10 +20,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,12 +48,20 @@ fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
 
     val viewModel: CatbreedViewModel = viewModel()
     val breed = viewModel.catListState.value
-
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
-        items(breed) {
-            CatListCell(
-                breed = it
-            , navigationCallBack)
+    var loading = viewModel.isLoading.value!!
+    if (loading) {
+        LinearProgressIndicator(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+    } else {
+        LazyColumn(contentPadding = PaddingValues(16.dp)) {
+            items(breed) {
+                CatListCell(
+                    breed = it
+                    , navigationCallBack)
+            }
         }
     }
 
