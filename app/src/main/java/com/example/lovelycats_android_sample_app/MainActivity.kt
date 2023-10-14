@@ -39,6 +39,7 @@ import androidx.navigation.navArgument
 import com.example.lovelycats_android_sample_app.View.CatDetailView
 import com.example.lovelycats_android_sample_app.View.CatDetailViewConstraintLayout
 import com.example.lovelycats_android_sample_app.View.CatListViewRendering
+import com.example.lovelycats_android_sample_app.View.ShowOnboardingView
 import com.example.lovelycats_android_sample_app.ViewModel.CatDetailViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LovelyCatsAndroidSampleAppTheme
 import com.squareup.moshi.Moshi
@@ -50,18 +51,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LovelyCatsAndroidSampleAppTheme {
-                // A surface container using the 'background' color from the theme
-               Scaffold(
-                   topBar = { ScaffoldWithTopBar() }) {
-//                   Surface(
-//                       modifier = Modifier.fillMaxSize(),
-//                       color = MaterialTheme.colorScheme.background
-//                   ) {
-//                       MainFlow()
-//                   }
-               }
+                // A surface container using the 'background' color from the themeKey
+                ShowOnboardingView()
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun KeyView() {
+    Scaffold(
+        topBar = { ScaffoldWithTopBar() }) {
     }
 }
 
