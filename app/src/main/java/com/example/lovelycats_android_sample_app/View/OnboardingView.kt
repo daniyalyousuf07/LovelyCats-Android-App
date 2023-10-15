@@ -68,10 +68,11 @@ fun ShowOnboardingView() {
             )
 
 
-            Row(Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 10.dp),
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(
                     Modifier
@@ -101,6 +102,7 @@ fun ShowOnboardingView() {
 
             if (presentMainFlow.value) {
                 ScaffoldWithTopBar()
+               // LoginView()
             }
         }
     }
