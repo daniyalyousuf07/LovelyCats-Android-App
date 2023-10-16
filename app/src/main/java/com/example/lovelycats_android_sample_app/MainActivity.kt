@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,6 +40,8 @@ import androidx.navigation.navArgument
 import com.example.lovelycats_android_sample_app.View.CatDetailView
 import com.example.lovelycats_android_sample_app.View.CatDetailViewConstraintLayout
 import com.example.lovelycats_android_sample_app.View.CatListViewRendering
+import com.example.lovelycats_android_sample_app.View.LoginView
+import com.example.lovelycats_android_sample_app.View.RootView
 import com.example.lovelycats_android_sample_app.View.ShowOnboardingView
 import com.example.lovelycats_android_sample_app.ViewModel.CatDetailViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LovelyCatsAndroidSampleAppTheme
@@ -52,74 +55,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             LovelyCatsAndroidSampleAppTheme {
                 // A surface container using the 'background' color from the themeKey
-                ShowOnboardingView()
+                RootView()
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun KeyView() {
-    Scaffold(
-        topBar = { ScaffoldWithTopBar() }) {
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ScaffoldWithTopBar() {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Top App Bar")
-                },
-                navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Filled.Home, "backIcon")
-                    }
-                },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
-            )
-        }, content = {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                MainFlow()
-            }
-        })
-}
-
-@Composable
-fun MainFlow() {
-    val navigationController = rememberNavController()
-    NavHost(navController = navigationController, startDestination = "cat-listing") {
-        composable(route = "cat-listing") {
-            CatListViewRendering(navigationCallBack = {
-                val moshi = Moshi.Builder().build()
-                val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
-                val modelJson = jsonAdapter.toJson(it)
-                navigationController.navigate("cat-detail={model}".replace("{model}", modelJson))
-            })
-        }
-        composable(route = "cat-detail={model}"
-//            ,
-//            arguments = listOf(navArgument(name = "cat-id") {
-//                type = NavType.StringType
-//            })
-        ) {
-            val modelJson =  it.arguments?.getString("model")
-            val moshi = Moshi.Builder().build()
-            val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
-            val model = jsonAdapter.fromJson(modelJson)
-            //CatDetailView(model = model!!)
-            CatDetailViewConstraintLayout(model = model!!)
         }
     }
 }
@@ -127,5 +64,5 @@ fun MainFlow() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    MainFlow()
+    RootView()
 }

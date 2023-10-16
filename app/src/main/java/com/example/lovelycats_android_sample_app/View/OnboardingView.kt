@@ -33,14 +33,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.lovelycats_android_sample_app.R
-import com.example.lovelycats_android_sample_app.ScaffoldWithTopBar
 import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowOnboardingView() {
+fun ShowOnboardingView(navController: NavController) {
     val presentMainFlow = mutableStateOf(false)
 
     var imagesArray = arrayOf(
@@ -101,8 +103,9 @@ fun ShowOnboardingView() {
 
 
             if (presentMainFlow.value) {
-                ScaffoldWithTopBar()
-               // LoginView()
+                //ScaffoldWithTopBar()
+                //LoginView()
+                navController.navigate("login-view")
             }
         }
     }
@@ -111,5 +114,5 @@ fun ShowOnboardingView() {
 @Preview
 @Composable
 fun PreviewShowOnboardingView() {
-    ShowOnboardingView()
+    ShowOnboardingView(navController = rememberNavController())
 }

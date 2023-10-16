@@ -29,13 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.lovelycats_android_sample_app.ScaffoldWithTopBar
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginView() {
-    var presentMainFlow by remember { mutableStateOf(false) }
+fun LoginView(navController: NavController) {
+    var presentMainFlow =  mutableStateOf(false)
     Scaffold(content = {
         Column(
             modifier = Modifier
@@ -75,13 +76,13 @@ fun LoginView() {
             Spacer(modifier = Modifier.height(18.dp))
 
             Button(onClick = {
-                presentMainFlow = true
+                presentMainFlow.value = true
             }) {
                 Text(text = "Login")
             }
 
-            if (presentMainFlow) {
-                ScaffoldWithTopBar()
+            if (presentMainFlow.value) {
+                navController.navigate("scaffold-top")
             }
         }
     })
@@ -90,5 +91,5 @@ fun LoginView() {
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    LoginView()
+    LoginView(navController = rememberNavController())
 }
