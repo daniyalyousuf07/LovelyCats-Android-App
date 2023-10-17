@@ -82,7 +82,7 @@ fun LoginView(navController: NavController) {
             }
 
             if (presentMainFlow.value) {
-                navController.navigate("scaffold-top")
+                navController.navigate("cat-listing")
             }
         }
     })

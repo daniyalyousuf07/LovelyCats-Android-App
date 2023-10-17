@@ -1,16 +1,20 @@
 package com.example.lovelycats_android_sample_app.View
 
 import BreedModel
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -18,12 +22,24 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -44,29 +60,52 @@ import coil.compose.AsyncImage
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
 
     val viewModel: CatbreedViewModel = viewModel()
     val breed = viewModel.catListState.value
     var loading = viewModel.isLoading.value!!
-    if (loading) {
-        CircularProgressIndicator(
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "Top App Bar")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        Icon(Icons.Filled.Home, "backIcon")
+                    }
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+            )
+        },
+        content = {
+        Column(
             modifier = Modifier
-                .padding(12.dp),
-            color = MaterialTheme.colorScheme.primary,
-            strokeWidth = 2.dp,
-        )
-    } else {
-        LazyColumn(contentPadding = PaddingValues(16.dp)) {
-            items(breed) {
-                CatListCell(
-                    breed = it
-                    , navigationCallBack)
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(12.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeWidth = 2.dp,
+                )
+            } else {
+                LazyColumn(contentPadding = PaddingValues(16.dp)) {
+                    items(breed) {
+                        CatListCell(
+                            breed = it
+                            , navigationCallBack)
+                    }
+                }
             }
         }
-    }
-
+    })
 }
 @Composable
 fun CatListCell(

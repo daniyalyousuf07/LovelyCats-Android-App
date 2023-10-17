@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("com.squareup.retrofit2:converter-moshi:2.4.0")
     implementation("androidx.navigation:navigation-compose:2.6.0") //Navigation jet pack compose
