@@ -34,6 +34,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -74,6 +75,9 @@ import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
 
+
+
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +113,11 @@ fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
                 },
                 selected = false,
                 onClick = {
-
+                    scope.launch {
+                        drawerState.apply {
+                            if (isClosed) open() else close()
+                        }
+                    }
                 }
             )
             Divider()
