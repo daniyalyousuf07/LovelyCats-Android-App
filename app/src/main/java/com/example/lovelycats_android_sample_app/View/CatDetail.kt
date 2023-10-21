@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -79,35 +81,35 @@ fun CatDetailView(model: BreedModel) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatDetailViewConstraintLayout(model: BreedModel) {
 
     val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id)
-
     ConstraintLayout {
 
         val (image, name, description) = createRefs()
-            val matrix = ColorMatrix()
-            matrix.setToSaturation(2F)
+        val matrix = ColorMatrix()
+        matrix.setToSaturation(2F)
 
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://image.lexica.art/full_jpg/5ff6c2c0-a3da-4dd7-8071-919f66b18fa9")
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .constrainAs(image) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        height = Dimension.value(400.dp)
-                    }
-                    .height(400.dp),
-                colorFilter = ColorFilter.colorMatrix(matrix)
-            )
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("https://image.lexica.art/full_jpg/5ff6c2c0-a3da-4dd7-8071-919f66b18fa9")
+                .crossfade(true)
+                .build(),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .constrainAs(image) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    height = Dimension.value(400.dp)
+                }
+                .height(400.dp),
+            colorFilter = ColorFilter.colorMatrix(matrix)
+        )
 
         Text(text = model.name,
             textAlign = TextAlign.Center,
@@ -118,13 +120,15 @@ fun CatDetailViewConstraintLayout(model: BreedModel) {
                 top.linkTo(image.bottom, margin = 20.dp)
                 centerHorizontallyTo(parent)
             },
-            )
+        )
 
         Text(text = model.description,
             textAlign = TextAlign.Center,
-            fontSize = 20.sp, modifier = Modifier.constrainAs(description) {
-                top.linkTo(name.bottom, margin = 10.dp)
-            }.padding(8.dp))
-        }
+            fontSize = 20.sp, modifier = Modifier
+                .constrainAs(description) {
+                    top.linkTo(name.bottom, margin = 10.dp)
+                }
+                .padding(8.dp))
     }
+}
 

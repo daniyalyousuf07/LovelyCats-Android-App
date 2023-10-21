@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.lovelycats_android_sample_app.Helpers.ScreenConfig
 import com.example.lovelycats_android_sample_app.R
 import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 
@@ -103,9 +104,7 @@ fun ShowOnboardingView(navController: NavController) {
 
 
             if (presentMainFlow.value) {
-                //ScaffoldWithTopBar()
-                //LoginView()
-                navController.navigate("login-view")
+                navController.navigate(ScreenConfig.Login.route)
             }
         }
     }

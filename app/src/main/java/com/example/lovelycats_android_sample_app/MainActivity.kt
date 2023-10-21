@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
             LovelyCatsAndroidSampleAppTheme {
                 // A surface container using the 'background' color from the themeKey
                 RootView()
+
             }
         }
     }
