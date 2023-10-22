@@ -26,7 +26,10 @@ fun RootView() {
 
     NavHost(navController = navigationController, startDestination = startDestination) {
         composable(route = ScreenConfig.Home.route) {
-            TabbarView(navController = navigationController)
+            TabbarView(navController = navigationController, popToRoot = {
+                navigationController.navigate(ScreenConfig.Login.route)
+                preferencesManager.save("hasSeenOnboarding", false)
+            })
         }
 
         composable(route = ScreenConfig.Login.route) {

@@ -52,7 +52,7 @@ fun ScaffoldWithTopBar(navController: NavController) {
                     val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
                     val modelJson = jsonAdapter.toJson(it)
                     navController.navigate("cat-detail={model}".replace("{model}", modelJson))
-                })
+                } , popToRoot = {})
             }
         })
 }

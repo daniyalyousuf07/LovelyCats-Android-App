@@ -45,12 +45,21 @@ import com.squareup.moshi.Moshi
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TabbarView(navController: NavHostController) {
+fun TabbarView(navController: NavHostController,
+               popToRoot: () -> Unit) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
     Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = {
+            if (navBackStackEntry?.destination?.route != ScreenConfig.CatDetail.route) {
+                BottomBar(navController = navController)
+            }
+        }
     ) {
-        BottomNavGraph(navController = navController)
+        BottomNavGraph(navController = navController, popToRoot = {
+            popToRoot()
+        })
     }
 }
 
@@ -62,6 +71,7 @@ fun BottomBar(navController: NavHostController) {
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.primary
@@ -107,7 +117,8 @@ fun RowScope.AddItem(
 }
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(navController: NavHostController,
+                   popToRoot: () -> Unit) {
     NavHost(
         navController = navController,
         startDestination = ScreenConfig.Home.route
@@ -118,6 +129,8 @@ fun BottomNavGraph(navController: NavHostController) {
                 val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
                 val modelJson = jsonAdapter.toJson(it)
                 navController.navigate(ScreenConfig.CatDetail.route.replace("{model}", modelJson))
+            }, popToRoot = {
+                popToRoot()
             })
         }
 

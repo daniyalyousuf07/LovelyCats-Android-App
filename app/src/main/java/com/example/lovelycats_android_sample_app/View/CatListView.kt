@@ -69,7 +69,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.lovelycats_android_sample_app.Helpers.ScreenConfig
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 import kotlinx.coroutines.launch
@@ -81,8 +83,8 @@ import okhttp3.internal.wait
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
-
+fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit,  popToRoot: () -> Unit) {
+    val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -132,7 +134,7 @@ fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit) {
                 },
                 selected = false,
                 onClick = {
-
+popToRoot()
                 }
             )
         }
