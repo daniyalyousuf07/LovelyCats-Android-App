@@ -4,9 +4,11 @@ import BreedModel
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,7 +32,11 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -90,7 +97,7 @@ fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit,  popToRoot: (
 
 
     val viewModel: CatbreedViewModel = viewModel()
-    val breed = viewModel.catListState.value
+    val breed = viewModel.catListState
     var loading = viewModel.isLoading.value!!
 
     ModalNavigationDrawer(
@@ -180,9 +187,12 @@ popToRoot()
                         )
                     } else {
                         LazyColumn(contentPadding = PaddingValues(16.dp)) {
-                            items(breed) {
+                            itemsIndexed(viewModel.catListState) { index, cat ->
                                 CatListCell(
-                                    breed = it
+                                    breed = cat,
+                                    toggleFav = {
+                                                viewModel.updateFav(index)
+                                    }
                                     , navigationCallBack)
                             }
                         }
@@ -195,50 +205,63 @@ popToRoot()
 @Composable
 fun CatListCell(
     breed: BreedModel,
+    toggleFav: () -> Unit,
     navigationCallBack: (BreedModel) -> Unit) {
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp)
-            .clickable {
-                navigationCallBack(breed)
-            }
-    )     {
-        Row(modifier = Modifier.animateContentSize()) {
-            Spacer(modifier = Modifier.padding(5.dp))
-            AsyncImage(model = "https://cataas.com/cat/says/hello%20world!",
-                contentDescription = breed.name,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .border(
-                        border = BorderStroke(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.LightGreen
-                        ), shape = CircleShape
-                    )
-                    .align(Alignment.CenterVertically),
-                contentScale = ContentScale.FillBounds
-            )
-            Spacer(modifier = Modifier.padding(5.dp))
-            Column(modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .fillMaxWidth(0.8f)
-                .padding(2.dp),
-            ) {
-                Text(text = breed.name,
-                    style = MaterialTheme.typography.headlineLarge)
+    Box(contentAlignment = Alignment.TopEnd) {
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            elevation = CardDefaults.cardElevation(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .clickable {
+                    navigationCallBack(breed)
+                }
+        )     {
+            Row(modifier = Modifier.animateContentSize()) {
+                Spacer(modifier = Modifier.padding(5.dp))
+                AsyncImage(model = "https://cataas.com/cat/says/hello%20world!",
+                    contentDescription = breed.name,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .border(
+                            border = BorderStroke(
+                                width = 2.dp,
+                                color = MaterialTheme.colorScheme.LightGreen
+                            ), shape = CircleShape
+                        )
+                        .align(Alignment.CenterVertically),
+                    contentScale = ContentScale.FillBounds
+                )
+                Spacer(modifier = Modifier.padding(5.dp))
+                Column(modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxWidth(0.8f)
+                    .padding(2.dp),
+                ) {
+                    Text(text = breed.name ?: "",
+                        style = MaterialTheme.typography.headlineLarge)
 
-                CompositionLocalProvider {
-                    Text(text = breed.description,
-                        textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    CompositionLocalProvider {
+                        Text(text = breed.description ?: "",
+                            textAlign = TextAlign.Start,
+                            style = MaterialTheme.typography.bodyMedium,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
+        }
+        Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent,
+            contentColor = Color.Black),
+            modifier = Modifier.padding(top = 10.dp),
+            onClick = {
+               toggleFav()
+            }) {
+           // println(breed.isFav.value)
+            Icon(imageVector = if (breed.isFav) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                contentDescription = "")
         }
     }
 }

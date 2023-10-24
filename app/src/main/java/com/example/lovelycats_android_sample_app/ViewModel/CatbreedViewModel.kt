@@ -1,7 +1,9 @@
 package com.example.lovelycats_android_sample_app.ViewModel
 
 import BreedModel
+import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,12 +19,12 @@ class CatbreedViewModel() : ViewModel() {
     private val repository: CatbreedRepository = CatbreedRepository.getInstance()
     private val job = Job()
     var isLoading: MutableState<Boolean> = mutableStateOf<Boolean>(true)
-    var catListState: MutableState<List<BreedModel>> = mutableStateOf(emptyList<BreedModel>())
+    var catListState = mutableStateListOf<BreedModel>()
     init {
         val scope = CoroutineScope(job + Dispatchers.IO)
         scope.launch {
             val breeds = getBreeds()
-            catListState.value = breeds
+            catListState.addAll(breeds)
             isLoading.value = false
         }
     }
@@ -32,9 +34,14 @@ class CatbreedViewModel() : ViewModel() {
     }
 
     fun getBreed(id: String): BreedModel {
-        return catListState.value.first {
+        return catListState.first {
             it.id == id
         }
+    }
+
+    fun updateFav(index: Int) {
+        var isFav = catListState[index].isFav
+        catListState[index] = catListState[index].copy(isFav = isFav.not())
     }
 
     override fun onCleared() {

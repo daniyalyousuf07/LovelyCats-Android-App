@@ -41,7 +41,7 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 @Composable
 fun CatDetailView(model: BreedModel) {
 
-    val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id)
+    val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id!!)
 
     LazyColumn() {
         items(1) {
@@ -66,11 +66,11 @@ fun CatDetailView(model: BreedModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = 15.dp)) {
-                Text(text = model.name,
+                Text(text = model.name ?: "",
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Medium)
-                Text(text = model.description,
+                Text(text = model.description ?: "",
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp)
             }
@@ -85,7 +85,7 @@ fun CatDetailView(model: BreedModel) {
 @Composable
 fun CatDetailViewConstraintLayout(model: BreedModel) {
 
-    val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id)
+    val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id!!)
     ConstraintLayout {
 
         val (image, name, description) = createRefs()
@@ -111,7 +111,7 @@ fun CatDetailViewConstraintLayout(model: BreedModel) {
             colorFilter = ColorFilter.colorMatrix(matrix)
         )
 
-        Text(text = model.name,
+        Text(text = model.name ?: "",
             textAlign = TextAlign.Center,
             fontSize = 30.sp,
             fontWeight = FontWeight.Medium,
@@ -122,7 +122,7 @@ fun CatDetailViewConstraintLayout(model: BreedModel) {
             },
         )
 
-        Text(text = model.description,
+        Text(text = model.description ?: "",
             textAlign = TextAlign.Center,
             fontSize = 20.sp, modifier = Modifier
                 .constrainAs(description) {
