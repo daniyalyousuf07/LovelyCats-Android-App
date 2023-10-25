@@ -78,7 +78,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.example.lovelycats_android_sample_app.Helpers.ScreenConfig
+import com.example.lovelycats_android_sample_app.Navigation.NavGraph.Graph
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
 import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 import kotlinx.coroutines.launch
@@ -97,7 +97,6 @@ fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit,  popToRoot: (
 
 
     val viewModel: CatbreedViewModel = viewModel()
-    val breed = viewModel.catListState
     var loading = viewModel.isLoading.value!!
 
     ModalNavigationDrawer(
@@ -141,7 +140,7 @@ fun CatListViewRendering(navigationCallBack: (BreedModel) -> Unit,  popToRoot: (
                 },
                 selected = false,
                 onClick = {
-popToRoot()
+                   popToRoot()
                 }
             )
         }

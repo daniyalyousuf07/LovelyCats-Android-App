@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lovelycats_android_sample_app.Models.CatImageDetailModel
@@ -18,13 +19,13 @@ import okhttp3.Dispatcher
 class CatbreedViewModel() : ViewModel() {
     private val repository: CatbreedRepository = CatbreedRepository.getInstance()
     private val job = Job()
-    var isLoading: MutableState<Boolean> = mutableStateOf<Boolean>(true)
+    var isLoading = mutableStateOf<Boolean>(true)
     var catListState = mutableStateListOf<BreedModel>()
     init {
         val scope = CoroutineScope(job + Dispatchers.IO)
         scope.launch {
             val breeds = getBreeds()
-            catListState.addAll(breeds)
+            catListState = breeds.toMutableStateList()
             isLoading.value = false
         }
     }

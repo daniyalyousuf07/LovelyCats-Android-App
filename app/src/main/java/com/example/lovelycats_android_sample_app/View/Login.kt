@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.lovelycats_android_sample_app.Helpers.ScreenConfig
+import com.example.lovelycats_android_sample_app.Helpers.BottomBarScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,7 +83,8 @@ fun LoginView(navController: NavController) {
             }
 
             if (presentMainFlow.value) {
-                navController.navigate(ScreenConfig.Home.route)
+                navController.popBackStack()
+                navController.navigate(BottomBarScreen.Home.route)
             }
         }
     })

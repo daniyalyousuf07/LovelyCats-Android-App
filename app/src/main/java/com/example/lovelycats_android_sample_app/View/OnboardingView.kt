@@ -36,14 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.lovelycats_android_sample_app.Helpers.ScreenConfig
+import com.example.lovelycats_android_sample_app.Navigation.NavGraph.AuthScreen
 import com.example.lovelycats_android_sample_app.R
 import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowOnboardingView(navController: NavController) {
+fun ShowOnboardingView(navController: NavController, didTapSkip: () -> Unit) {
     val presentMainFlow = mutableStateOf(false)
 
     var imagesArray = arrayOf(
@@ -58,7 +58,6 @@ fun ShowOnboardingView(navController: NavController) {
         val height = 100.dp
         Box(
             modifier = Modifier
-                //.height(height)
                 .fillMaxWidth()
                 .background(White, shape = shape),
             contentAlignment = Alignment.Center
@@ -95,6 +94,7 @@ fun ShowOnboardingView(navController: NavController) {
                 }
 
                 Button(onClick = {
+                    didTapSkip()
                     presentMainFlow.value = true
                 }) {
                     Text(text = "Skip")
@@ -104,7 +104,8 @@ fun ShowOnboardingView(navController: NavController) {
 
 
             if (presentMainFlow.value) {
-                navController.navigate(ScreenConfig.Login.route)
+                navController.popBackStack()
+                navController.navigate(AuthScreen.Login.route)
             }
         }
     }
@@ -113,5 +114,5 @@ fun ShowOnboardingView(navController: NavController) {
 @Preview
 @Composable
 fun PreviewShowOnboardingView() {
-    ShowOnboardingView(navController = rememberNavController())
+    ShowOnboardingView(navController = rememberNavController(), didTapSkip = {})
 }

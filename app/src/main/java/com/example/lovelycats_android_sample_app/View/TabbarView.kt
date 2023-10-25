@@ -1,6 +1,7 @@
 package com.example.lovelycats_android_sample_app.View
 
 import BreedModel
+import DetailsScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -39,7 +40,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.lovelycats_android_sample_app.Helpers.ScreenConfig
+import com.example.lovelycats_android_sample_app.Helpers.BottomBarScreen
 import com.squareup.moshi.Moshi
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +53,7 @@ fun TabbarView(navController: NavHostController,
 
     Scaffold(
         bottomBar = {
-            if (navBackStackEntry?.destination?.route != ScreenConfig.CatDetail.route) {
+            if (navBackStackEntry?.destination?.route != DetailsScreen.CatDetail.route) {
                 BottomBar(navController = navController)
             }
         }
@@ -66,8 +67,8 @@ fun TabbarView(navController: NavHostController,
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
-        ScreenConfig.Home,
-        ScreenConfig.Settings,
+        BottomBarScreen.Home,
+        BottomBarScreen.Settings,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -88,7 +89,7 @@ fun BottomBar(navController: NavHostController) {
 
 @Composable
 fun RowScope.AddItem(
-    screen: ScreenConfig,
+    screen: BottomBarScreen,
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
@@ -105,8 +106,7 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = Color.Black,
-        selectedContentColor = Color.White,
+        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
@@ -121,20 +121,20 @@ fun BottomNavGraph(navController: NavHostController,
                    popToRoot: () -> Unit) {
     NavHost(
         navController = navController,
-        startDestination = ScreenConfig.Home.route
+        startDestination = BottomBarScreen.Home.route
     ) {
-        composable(route = ScreenConfig.Home.route) {
+        composable(route = BottomBarScreen.Home.route) {
             CatListViewRendering(navigationCallBack = {
                 val moshi = Moshi.Builder().build()
                 val jsonAdapter = moshi.adapter(BreedModel::class.java).lenient()
                 val modelJson = jsonAdapter.toJson(it)
-                navController.navigate(ScreenConfig.CatDetail.route.replace("{model}", modelJson))
+                navController.navigate(DetailsScreen.CatDetail.route.replace("{model}", modelJson))
             }, popToRoot = {
                 popToRoot()
             })
         }
 
-        composable(route = ScreenConfig.CatDetail.route
+        composable(route = DetailsScreen.CatDetail.route
 //            ,
 //            arguments = listOf(navArgument(name = "cat-id") {
 //                type = NavType.StringType
@@ -148,7 +148,7 @@ fun BottomNavGraph(navController: NavHostController,
             CatDetailViewConstraintLayout(model = model!!)
         }
 
-        composable(route = ScreenConfig.Settings.route) {
+        composable(route = BottomBarScreen.Settings.route) {
             Text(text = "Settings")
         }
     }
