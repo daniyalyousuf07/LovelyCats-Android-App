@@ -45,7 +45,6 @@ import com.example.lovelycats_android_sample_app.ui.theme.LightGreen
 @Composable
 fun ShowOnboardingView(navController: NavController, didTapSkip: () -> Unit) {
     val presentMainFlow = mutableStateOf(false)
-
     var imagesArray = arrayOf(
         R.drawable.cat1,
         R.drawable.cat2,
