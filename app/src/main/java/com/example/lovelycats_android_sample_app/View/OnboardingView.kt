@@ -91,7 +91,6 @@ fun ShowOnboardingView(navController: NavController, didTapSkip: () -> Unit) {
                         )
                     }
                 }
-
                 Button(onClick = {
                     didTapSkip()
                     presentMainFlow.value = true
