@@ -1,6 +1,7 @@
 package com.example.lovelycats_android_sample_app.View
 
 import BreedModel
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.lovelycats_android_sample_app.Models.CatImageDetailModel
+import com.example.lovelycats_android_sample_app.ReusableComponents.Views.shimmerBrush
 import com.example.lovelycats_android_sample_app.ViewModel.CatDetailViewModel
 import com.example.lovelycats_android_sample_app.ViewModel.CatbreedViewModel
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
@@ -86,6 +90,8 @@ fun CatDetailView(model: BreedModel) {
 fun CatDetailViewConstraintLayout(model: BreedModel) {
 
     val viewModel: CatDetailViewModel = CatDetailViewModel(id = model.id!!)
+    val showShimmer = remember { mutableStateOf(true) }
+
     ConstraintLayout {
 
         val (image, name, description) = createRefs()
@@ -100,6 +106,7 @@ fun CatDetailViewConstraintLayout(model: BreedModel) {
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
+                .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer.value))
                 .fillMaxSize()
                 .constrainAs(image) {
                     top.linkTo(parent.top)
@@ -108,7 +115,10 @@ fun CatDetailViewConstraintLayout(model: BreedModel) {
                     height = Dimension.value(400.dp)
                 }
                 .height(400.dp),
-            colorFilter = ColorFilter.colorMatrix(matrix)
+            colorFilter = ColorFilter.colorMatrix(matrix),
+            onSuccess = {
+                showShimmer.value = false
+            }
         )
 
         Text(text = model.name ?: "",
